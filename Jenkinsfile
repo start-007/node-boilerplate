@@ -50,21 +50,20 @@ pipeline {
         echo "Commiting new version to github"
         script{
           
-          withCredentials([
-              usernamePassword(credentialsId: 'github-credentials', usernameVariable: 'USER', passwordVariable: 'PWD')
-          ]) {
-            sh "git remote rm origin"
-            sh "git remote add origin https://${USER}:${PWD}@github.com/start-007/node-boilerplate.git"
-          }
-
-          sh '''UPDATED_VERSION=$(node -p "require('./package.json').version")
+           sh '''UPDATED_VERSION=$(node -p "require('./package.json').version")
                 git remote rm origin
                 git config --global user.email 'jenkins@example.com'
                 git config --global user.name 'jenkins'
                 git add package.json
                 git add package-lock.json
-                git commit -m "Updating service version from $CURRENT_VERSION to $UPDATED_VERSION" 
-                git push origin $BRANCH_NAME '''
+                git commit -m "Updating service version from $CURRENT_VERSION to $UPDATED_VERSION " 
+               '''
+          withCredentials([
+              usernamePassword(credentialsId: 'github-credentials', usernameVariable: 'USER', passwordVariable: 'PWD')
+          ]) {
+            
+            sh  "git push 'https://${USER}:${PWD}@github.com/start-007/node-boilerplate.git' HEAD:master"
+          }
         }
     }
 
