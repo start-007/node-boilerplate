@@ -64,7 +64,7 @@ pipeline {
                 git add package.json
                 git add package-lock.json
                 git commit -m "Updating service version from $CURRENT_VERSION to $UPDATED_VERSION" 
-                git push origin HEAD:master '''
+                git push origin $BRANCH_NAME '''
         }
     }
 
