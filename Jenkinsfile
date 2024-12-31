@@ -25,7 +25,7 @@ pipeline {
       steps {
         script{
             withCredentials([
-                    usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'USER', passwordVariable: 'PWD')
+                    usernamePassword(credentialsId: 'docker-hub', usernameVariable: 'USER', passwordVariable: 'PWD')
                 ]) {
                 
                 sh "docker build -t ${DOCKERHUB_REPO}:${IMAGE_VERSION} ."
