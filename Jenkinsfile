@@ -52,7 +52,7 @@ pipeline {
           
           
                     withCredentials([
-              sshUserPrivateKey(credentialsId: 'github-ssh')
+              sshUserPrivateKey(credentialsId: 'github-ssh', keyFileVariable: 'SSH_KEY')
           ]) {
               // Set the SSH key for git authentication
               sh """
