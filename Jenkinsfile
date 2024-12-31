@@ -50,6 +50,7 @@ pipeline {
         echo "Commiting new version to github"
         script{
           sh '''UPDATED_VERSION=$(node -p "require('./package.json').version")
+                git remote rm origin
                 git remote add origin https://github.com/start-007/node-boilerplate.git
                 git config --global user.email=jenkins@example.com
                 git config --global user.name=jenkins
