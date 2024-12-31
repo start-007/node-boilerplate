@@ -76,7 +76,7 @@ pipeline {
         //       sh "git push git@github.com:start-007/node-boilerplate.git HEAD:master"
         //   }
 
-        }
+        //}
     }
 
     failure {
