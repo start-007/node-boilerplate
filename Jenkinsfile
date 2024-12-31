@@ -52,12 +52,12 @@ pipeline {
           sh '''UPDATED_VERSION=$(node -p "require('./package.json').version")
                 git remote rm origin
                 git remote add origin https://github.com/start-007/node-boilerplate.git
-                git config --global user.email=jenkins@example.com
-                git config --global user.name=jenkins
+                git config --global user.email 'jenkins@example.com'
+                git config --global user.name 'jenkins'
                 git add package.json
                 git add package-lock.json
                 git commit -m "Updating service version from $CURRENT_VERSION to $UPDATED_VERSION" 
-                git push origin HEAD:master'''
+                git push origin HEAD:master '''
         }
     }
 
