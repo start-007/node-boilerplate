@@ -7,7 +7,7 @@ pipeline {
         echo "Initializing "
       }
     }
-    environment{
+    environment {
       DOCKERHUB_REPO = "starteja007/node-app"
 
     }
@@ -17,7 +17,7 @@ pipeline {
             def packageJson = readJSON file: 'package.json'
             def packageJsonVersion = packageJson.version
             env.IMAGE_VERSION=packageJsonVersion
-            echo "${IMAGE_VERSION}"
+            echo "Version: ${IMAGE_VERSION}"
         }
       }
     }
