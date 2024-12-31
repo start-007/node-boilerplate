@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   node-app:
-    image: starteja007/node-app:1.0.1
+    image: ${IMAGE}
     ports:
       - 3000:3000
   postgres:

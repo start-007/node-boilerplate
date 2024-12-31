@@ -39,14 +39,12 @@ pipeline {
     stage("deploy") {
       steps {
         script{
-          echo "Deploying to ec2"
-          def dockercmd= 'docker run -p 3000:3000 -d starteja007/node-app:1.0.1'
-         
-          def dockerCompose= "docker-compose -f docker-compose.yaml up --detach"
+          echo "Deploying to ec2"         
+          def shellscript= "bash ./shellscript.sh ${DOCKERHUB_REPO}:${IMAGE_VERSION}"
           sshagent(['ec2-ssh-key']){
-
+            sh "scp shellscript.sh ubuntu@ec2-3-87-0-247.compute-1.amazonaws.com:/home/ubuntu"
             sh "scp docker-compose.yaml ubuntu@ec2-3-87-0-247.compute-1.amazonaws.com:/home/ubuntu"
-            sh "ssh -o StrictHostKeyChecking=no ubuntu@ec2-3-87-0-247.compute-1.amazonaws.com ${dockerCompose}"
+            sh "ssh -o StrictHostKeyChecking=no ubuntu@ec2-3-87-0-247.compute-1.amazonaws.com ${shellscript}"
           }
         }
       }
