@@ -45,11 +45,16 @@ pipeline {
           withCredentials([
                     usernamePassword(credentialsId: 'docker-hub', usernameVariable: 'USER', passwordVariable: 'PWD')
                 ]) {
-                  dockerlogin= "echo ${PWD} | docker login -u ${USER} --password-stdin"
+                  dockerlogin= " docker login -u ${USER} -p ${PWD}"
                 }
 
           sshagent(['ec2-ssh-key']){
-            sh "ssh -o StrictHostKeyChecking=no ubuntu@ec2-3-87-0-247.compute-1.amazonaws.com ${dockerlogin} ${dockercmd}"
+            withCredentials([
+                    usernamePassword(credentialsId: 'docker-hub', usernameVariable: 'USER', passwordVariable: 'PWD')
+                ]) {
+                  dockerlogin= " docker login -u ${USER} -p ${PWD}"
+                }
+            sh "ssh -o StrictHostKeyChecking=no ubuntu@ec2-3-87-0-247.compute-1.amazonaws.com ${dockercmd}"
           }
         }
       }
