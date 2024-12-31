@@ -14,9 +14,7 @@ pipeline {
     stage("versioning"){
       steps{
         script{
-            def packageJson = readJSON file: 'package.json'
-            def packageJsonVersion = packageJson.version
-            env.IMAGE_VERSION=packageJsonVersion
+            env.IMAGE_VERSION=readJSON(file: 'package.json').version
             echo "Version: ${IMAGE_VERSION}"
         }
       }
