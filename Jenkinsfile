@@ -10,7 +10,7 @@ pipeline {
         echo "Initializing "
       }
     }
-    // trigger
+    // trigger 1
     stage("versioning"){
       steps{
         script{
