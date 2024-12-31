@@ -16,6 +16,7 @@ pipeline {
         script{
             env.IMAGE_VERSION=readJSON(file: 'package.json').version
             echo "Version: ${IMAGE_VERSION}"
+            //test again
         }
       }
     }
