@@ -57,8 +57,8 @@ pipeline {
               // Set the SSH key for git authentication
               sh """
                   mkdir -p ~/.ssh
-                  echo "$SSH_KEY" > ~/.ssh/id_rsa
-                  chmod 600 ~/.ssh/id_rsa
+                  echo "$SSH_KEY" > ~/.ssh/id_ed25519
+                  chmod 600 ~/.ssh/id_ed25519
               """
 
               // Configure Git user
