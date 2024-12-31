@@ -50,23 +50,32 @@ pipeline {
         echo "Commiting new version to github"
         script{
           
-           sh '''UPDATED_VERSION=$(node -p "require('./package.json').version")
-                git remote rm origin
-                git config --global user.email 'jenkins@example.com'
-                git config --global user.name 'jenkins'
-                git add package.json
-                git add package-lock.json
-                git commit -m "Updating service version from $CURRENT_VERSION to $UPDATED_VERSION " 
-               '''
-          withCredentials([
-              usernamePassword(credentialsId: 'github-credentials', usernameVariable: 'USER', passwordVariable: 'PWD')
+          
+                    withCredentials([
+              sshUserPrivateKey(credentialsId: 'github-ssh')
           ]) {
-            sh ''' git branch temp-branch
-                git checkout master
-                git merge temp-branch
-               '''
-              sh  "git push 'https://${USER}:${PWD}@github.com/start-007/node-boilerplate.git' master"
+              // Set the SSH key for git authentication
+              sh """
+                  mkdir -p ~/.ssh
+                  echo "$SSH_KEY" > ~/.ssh/id_rsa
+                  chmod 600 ~/.ssh/id_rsa
+              """
+
+              // Configure Git user
+              sh "git config user.email 'admin@example.com'"
+              sh "git config user.name 'example'"
+
+              // Ensure you're on the correct branch (e.g., main or master)
+              // Change 'main' to your desired branch name if different
+
+              // Add changes and commit
+              sh "git add ."
+              sh "git commit -m 'Triggered Build changed version'"
+
+              // Push the changes using SSH
+              sh "git push git@github.com:${USER}/node-boilerplate.git HEAD:master"
           }
+
         }
     }
 
