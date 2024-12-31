@@ -14,9 +14,10 @@ pipeline {
     stage("versioning"){
       steps{
         script{
+            sh "npm version patch --git-tag-version false"
             env.IMAGE_VERSION=readJSON(file: 'package.json').version
             echo "Version: ${IMAGE_VERSION}"
-            //triggering
+
         }
       }
     }
