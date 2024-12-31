@@ -39,6 +39,10 @@ pipeline {
     stage("deploy") {
       steps {
         echo "Deploying to ec2"
+        def dockercmd= 'docker run p 3000:3000 -d starteja007/node-app:1.0.1'
+        sshagent(['ec2-ssh-key']){
+          sh "ssh -o StrictHostKeyChecking=no ubuntu@ec2-3-87-0-247.compute-1.amazonaws.com ${dockercmd}"
+        }
       }
     }
     
