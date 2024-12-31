@@ -53,7 +53,7 @@ pipeline {
           withCredentials([
               usernamePassword(credentialsId: 'github-credentials', usernameVariable: 'USER', passwordVariable: 'PWD')
           ]) {
-          
+            sh "git remote rm origin"
             sh "git remote add origin https://${USER}:${PWD}@github.com/start-007/node-boilerplate.git"
           }
 
