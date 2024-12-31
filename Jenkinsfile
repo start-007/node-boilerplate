@@ -61,8 +61,11 @@ pipeline {
           withCredentials([
               usernamePassword(credentialsId: 'github-credentials', usernameVariable: 'USER', passwordVariable: 'PWD')
           ]) {
-            
-            sh  "git push 'https://${USER}:${PWD}@github.com/start-007/node-boilerplate.git' HEAD:master"
+            sh ''' git branch temp-branch
+                git checkout master
+                git merge temp-branch
+               '''
+              sh  "git push 'https://${USER}:${PWD}@github.com/start-007/node-boilerplate.git' master"
           }
         }
     }
