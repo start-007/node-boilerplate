@@ -49,9 +49,16 @@ pipeline {
     success {
         echo "Commiting new version to github"
         script{
+          
+          withCredentials([
+              usernamePassword(credentialsId: 'github-credentials', usernameVariable: 'USER', passwordVariable: 'PWD')
+          ]) {
+          
+            sh "git remote add origin https://${USER}:${PWD}@github.com/start-007/node-boilerplate.git"
+          }
+
           sh '''UPDATED_VERSION=$(node -p "require('./package.json').version")
                 git remote rm origin
-                git remote add origin https://github.com/start-007/node-boilerplate.git
                 git config --global user.email 'jenkins@example.com'
                 git config --global user.name 'jenkins'
                 git add package.json
