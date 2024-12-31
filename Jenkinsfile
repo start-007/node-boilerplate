@@ -21,33 +21,43 @@ pipeline {
         }
       }
     }
-    stage("build") {
-      steps {
-        script{
-            withCredentials([
-                    usernamePassword(credentialsId: 'docker-hub', usernameVariable: 'USER', passwordVariable: 'PWD')
-                ]) {
+    // stage("build") {
+    //   steps {
+    //     script{
+    //         withCredentials([
+    //                 usernamePassword(credentialsId: 'docker-hub', usernameVariable: 'USER', passwordVariable: 'PWD')
+    //             ]) {
                 
-                sh "docker build -t ${DOCKERHUB_REPO}:${IMAGE_VERSION} ."
-                sh "echo ${PWD} | docker login -u ${USER} --password-stdin"
-                sh "docker push ${DOCKERHUB_REPO}:${IMAGE_VERSION}"
+    //             sh "docker build -t ${DOCKERHUB_REPO}:${IMAGE_VERSION} ."
+    //             sh "echo ${PWD} | docker login -u ${USER} --password-stdin"
+    //             sh "docker push ${DOCKERHUB_REPO}:${IMAGE_VERSION}"
 
-            }
-        }
-      }
-    }
-    stage("deploy") {
-      steps {
-        echo "Deploying to ec2"
-      }
-    }
+    //         }
+    //     }
+    //   }
+    // }
+    // stage("deploy") {
+    //   steps {
+    //     echo "Deploying to ec2"
+    //   }
+    // }
     
   }
 
   post {
    
     success {
-        echo "Successs"
+        echo "Commiting new version to github"
+        script{
+          sh '''UPDATED_VERSION=$(node -p "require('./package.json').version")
+                git remote add origin https://github.com/start-007/node-boilerplate.git
+                git config --global user.email=jenkins@example.com
+                git config --global user.name=jenkins
+                git add package.json
+                git add package-lock.json
+                git commit -m "Updating service version from $CURRENT_VERSION to $UPDATED_VERSION" 
+                git push origin HEAD:master'''
+        }
     }
 
     failure {
