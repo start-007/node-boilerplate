@@ -73,7 +73,7 @@ pipeline {
               sh "git commit -m 'Triggered Build changed version'"
 
               // Push the changes using SSH
-              sh "git push git@github.com:${USER}/node-boilerplate.git HEAD:master"
+              sh "git push git@github.com:start-007/node-boilerplate.git HEAD:master"
           }
 
         }
