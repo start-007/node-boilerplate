@@ -1,16 +1,16 @@
 pipeline {
   agent any
+  environment {
+      DOCKERHUB_REPO = "starteja007/node-app"
 
+  }
   stages {
     stage("init") {
       steps {
         echo "Initializing "
       }
     }
-    environment {
-      DOCKERHUB_REPO = "starteja007/node-app"
-
-    }
+    
     stage("versioning"){
       steps{
         script{
