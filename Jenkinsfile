@@ -21,26 +21,26 @@ pipeline {
         }
       }
     }
-    // stage("build") {
-    //   steps {
-    //     script{
-    //         withCredentials([
-    //                 usernamePassword(credentialsId: 'docker-hub', usernameVariable: 'USER', passwordVariable: 'PWD')
-    //             ]) {
+    stage("build") {
+      steps {
+        script{
+            withCredentials([
+                    usernamePassword(credentialsId: 'docker-hub', usernameVariable: 'USER', passwordVariable: 'PWD')
+                ]) {
                 
-    //             sh "docker build -t ${DOCKERHUB_REPO}:${IMAGE_VERSION} ."
-    //             sh "echo ${PWD} | docker login -u ${USER} --password-stdin"
-    //             sh "docker push ${DOCKERHUB_REPO}:${IMAGE_VERSION}"
+                sh "docker build -t ${DOCKERHUB_REPO}:${IMAGE_VERSION} ."
+                sh "echo ${PWD} | docker login -u ${USER} --password-stdin"
+                sh "docker push ${DOCKERHUB_REPO}:${IMAGE_VERSION}"
 
-    //         }
-    //     }
-    //   }
-    // }
-    // stage("deploy") {
-    //   steps {
-    //     echo "Deploying to ec2"
-    //   }
-    // }
+            }
+        }
+      }
+    }
+    stage("deploy") {
+      steps {
+        echo "Deploying to ec2"
+      }
+    }
     
   }
 
@@ -48,33 +48,33 @@ pipeline {
    
     success {
         echo "Commiting new version to github"
-        script{
+        // script{
           
           
-                    withCredentials([
-              sshUserPrivateKey(credentialsId: 'github-ssh', keyFileVariable: 'SSH_KEY')
-          ]) {
-              // Set the SSH key for git authentication
-              sh """
-                  mkdir -p ~/.ssh
-                  echo "$SSH_KEY" > ~/.ssh/id_ed25519
-                  chmod 600 ~/.ssh/id_ed25519
-              """
+        //             withCredentials([
+        //       sshUserPrivateKey(credentialsId: 'github-ssh', keyFileVariable: 'SSH_KEY')
+        //   ]) {
+        //       // Set the SSH key for git authentication
+        //       sh """
+        //           mkdir -p ~/.ssh
+        //           echo "$SSH_KEY" > ~/.ssh/id_ed25519
+        //           chmod 600 ~/.ssh/id_ed25519
+        //       """
 
-              // Configure Git user
-              sh "git config user.email 'admin@example.com'"
-              sh "git config user.name 'example'"
+        //       // Configure Git user
+        //       sh "git config user.email 'admin@example.com'"
+        //       sh "git config user.name 'example'"
 
-              // Ensure you're on the correct branch (e.g., main or master)
-              // Change 'main' to your desired branch name if different
+        //       // Ensure you're on the correct branch (e.g., main or master)
+        //       // Change 'main' to your desired branch name if different
 
-              // Add changes and commit
-              sh "git add ."
-              sh "git commit -m 'Triggered Build changed version'"
+        //       // Add changes and commit
+        //       sh "git add ."
+        //       sh "git commit -m 'Triggered Build changed version'"
 
-              // Push the changes using SSH
-              sh "git push git@github.com:start-007/node-boilerplate.git HEAD:master"
-          }
+        //       // Push the changes using SSH
+        //       sh "git push git@github.com:start-007/node-boilerplate.git HEAD:master"
+        //   }
 
         }
     }
